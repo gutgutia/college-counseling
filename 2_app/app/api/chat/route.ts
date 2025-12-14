@@ -115,7 +115,7 @@ Remember: You have access to tools to save profile data. Use them when the stude
               content: text,
               toolCalls: toolCalls ? JSON.parse(JSON.stringify(toolCalls)) : undefined,
               toolResults: toolResults ? JSON.parse(JSON.stringify(toolResults)) : undefined,
-              model: "claude-sonnet-4-5",
+              model: "claude-sonnet-4-5", // Updated dynamically based on modelFor.advisor
               provider: "anthropic",
             },
           });

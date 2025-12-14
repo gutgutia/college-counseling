@@ -13,9 +13,9 @@ import { groq } from "@ai-sdk/groq";
 export const models = {
   // Anthropic Claude - Deep reasoning, empathetic responses
   claude: {
-    opus: anthropic("claude-opus-4-5-20250514"),
-    sonnet: anthropic("claude-sonnet-4-5-20250514"),
-    haiku: anthropic("claude-haiku-4-5-20250514"),
+    opus: anthropic("claude-opus-4-5"),
+    sonnet: anthropic("claude-sonnet-4-5"),
+    haiku: anthropic("claude-haiku-4-5"),
   },
   
   // OpenAI GPT-5 - Latest generation models
