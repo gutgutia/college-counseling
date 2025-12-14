@@ -3,33 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sesame3 — College prep without the panic.</title>
+  <title>Sesame3 — Your AI College Counselor</title>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
-      /* Palette: Calm, Grounded, Warm (Shared with App) */
-      --bg-page: #FDFCF8;
+      --bg-page: #FDFCF9;
       --bg-surface: #FFFFFF;
       --bg-secondary: #F7F5F0;
-      
-      /* Accents */
-      --accent-primary: #12756A; /* Deep Teal */
+      --accent-primary: #12756A;
       --accent-hover: #0F6158;
       --accent-surface: #E8F5F3;
-      
-      /* Text */
+      --accent-border: #C5E4DF;
       --text-main: #2D2A26;
       --text-muted: #6B665E;
       --text-light: #9E988E;
-      
-      --border: #E0DCD4;
-      
-      /* Layout */
-      --container-width: 1100px;
-      --radius-lg: 20px;
-      --radius-md: 12px;
+      --border: #E8E5DF;
+      --container-width: 1140px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,57 +30,67 @@
       background: var(--bg-page);
       color: var(--text-main);
       line-height: 1.6;
-      font-size: 16px;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* === Components === */
     .container {
       max-width: var(--container-width);
       margin: 0 auto;
       padding: 0 24px;
     }
 
+    /* === Typography === */
+    h1, h2, h3 {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    /* === Buttons === */
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 14px 28px;
-      border-radius: 100px; /* Pill shape for marketing */
+      border-radius: 100px;
       font-weight: 600;
       font-size: 15px;
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
+      border: none;
     }
-
     .btn-primary {
       background: var(--text-main);
       color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
-
-    .btn-ghost {
+    .btn-secondary {
+      background: white;
       color: var(--text-main);
-      background: transparent;
+      border: 1px solid var(--border);
     }
-    .btn-ghost:hover {
-      background: rgba(0,0,0,0.03);
+    .btn-secondary:hover {
+      background: var(--bg-secondary);
     }
+    .btn i { width: 18px; height: 18px; }
 
     /* === Navbar === */
     .navbar {
-      padding: 24px 0;
-      position: sticky;
+      padding: 20px 0;
+      position: fixed;
       top: 0;
-      background: rgba(253, 252, 248, 0.9);
-      backdrop-filter: blur(10px);
+      left: 0;
+      right: 0;
+      background: rgba(253, 252, 249, 0.85);
+      backdrop-filter: blur(12px);
       z-index: 100;
-      border-bottom: 1px solid rgba(0,0,0,0.03);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
     }
     .nav-inner {
       display: flex;
@@ -98,251 +99,436 @@
     }
     .logo {
       font-family: 'Satoshi', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
+      font-weight: 800;
+      font-size: 24px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       color: var(--text-main);
+      text-decoration: none;
     }
     .logo-mark {
-      width: 28px; height: 28px;
-      background: var(--text-main);
+      width: 32px; height: 32px;
+      background: var(--accent-primary);
       color: white;
-      border-radius: 6px;
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       font-size: 14px;
+      font-weight: 700;
     }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-cta .btn { padding: 10px 20px; font-size: 14px; }
 
-    /* === Hero Section === */
+    /* === Hero === */
     .hero {
-      padding: 100px 0 80px;
+      padding: 160px 0 100px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--accent-surface);
+      border: 1px solid var(--accent-border);
       border-radius: 100px;
       font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 24px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 28px;
     }
-    .hero-badge i { color: var(--accent-primary); width: 14px; height: 14px; }
-
+    .hero-badge i { width: 14px; height: 14px; }
     .hero-title {
-      font-family: 'Satoshi', sans-serif;
-      font-size: 56px;
+      font-size: 64px;
       font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
       margin-bottom: 24px;
-      color: var(--text-main);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .hero-title span {
+    .hero-title .highlight {
       color: var(--accent-primary);
       position: relative;
     }
-    /* Subtle underline accent */
-    .hero-title span::after {
-      content: '';
-      position: absolute;
-      bottom: 2px; left: 0; width: 100%; height: 6px;
-      background: var(--accent-surface);
-      z-index: -1;
-      border-radius: 4px;
-    }
-
     .hero-subtitle {
       font-size: 20px;
       color: var(--text-muted);
-      max-width: 600px;
+      max-width: 560px;
       margin: 0 auto 40px;
-      font-weight: 400;
+      line-height: 1.7;
     }
-
     .hero-actions {
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin-bottom: 80px;
+      margin-bottom: 72px;
     }
 
-    /* === Product Preview (CSS Mockup) === */
-    .product-preview {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: 
-        0 20px 40px -10px rgba(0,0,0,0.08),
-        0 0 0 1px rgba(0,0,0,0.02);
-      padding: 12px;
-      position: relative;
-      overflow: hidden;
+    /* Hero Screenshot */
+    .hero-screenshot {
       max-width: 1000px;
       margin: 0 auto;
+      position: relative;
+      height: 620px;
     }
-    /* Simple fake browser bar */
-    .preview-browser {
-      display: flex; gap: 6px; margin-bottom: 12px; padding-left: 8px;
-    }
-    .preview-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0DCD4; }
-
-    /* The UI Content inside preview */
-    .preview-ui {
-      background: var(--bg-page);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      height: 500px; /* Fixed height for mock */
+    .hero-screenshot-inner {
+      width: 1000px;
+      height: 620px;
+      transform-origin: top left;
+      border-radius: 20px;
       overflow: hidden;
+      box-shadow: 
+        0 40px 100px -30px rgba(0,0,0,0.2),
+        0 0 0 1px rgba(0,0,0,0.04);
+      background: var(--bg-surface);
     }
-    .preview-sidebar {
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      padding: 20px;
+    .hero-screenshot iframe {
+      width: 1000px;
+      height: 620px;
+      border: none;
+      display: block;
+      pointer-events: none;
     }
-    .preview-line { height: 10px; background: #EBE8E2; border-radius: 4px; margin-bottom: 12px; }
-    .preview-line.short { width: 60%; }
-    .preview-main { padding: 32px; position: relative; }
-    
-    /* Mock Focus Card inside Preview */
-    .mock-focus-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    /* Breakpoint: 900px → scale 0.85 */
+    @media (max-width: 950px) {
+      .hero-screenshot { height: 527px; }
+      .hero-screenshot-inner { transform: scale(0.85); }
     }
-    .mock-circle {
-      width: 48px; height: 48px;
-      background: var(--accent-surface);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent-primary);
+    /* Breakpoint: 768px → scale 0.72 */
+    @media (max-width: 800px) {
+      .hero-screenshot { height: 446px; }
+      .hero-screenshot-inner { transform: scale(0.72); }
     }
-    .mock-content { flex: 1; }
-    .mock-title { font-family: 'Satoshi'; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
-    .mock-text { height: 8px; width: 80%; background: #F0F0F0; border-radius: 4px; margin-bottom: 6px; }
-    
-    /* Floating Elements */
-    .float-card {
-      position: absolute;
-      background: white;
-      padding: 12px 16px;
-      border-radius: 10px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      animation: float 4s ease-in-out infinite;
+    /* Breakpoint: 600px → scale 0.55 */
+    @media (max-width: 620px) {
+      .hero-screenshot { height: 341px; }
+      .hero-screenshot-inner { transform: scale(0.55); }
     }
-    .float-card.one { top: 200px; right: 40px; }
-    .float-card.two { bottom: 80px; right: 120px; animation-delay: 1s; }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
+    /* Breakpoint: 480px → scale 0.43 */
+    @media (max-width: 500px) {
+      .hero-screenshot { height: 267px; }
+      .hero-screenshot-inner { transform: scale(0.43); }
+    }
+    /* Breakpoint: 375px → scale 0.33 */
+    @media (max-width: 400px) {
+      .hero-screenshot { height: 205px; }
+      .hero-screenshot-inner { transform: scale(0.33); }
     }
 
-    /* === Value Props === */
-    .features {
-      padding: 100px 0;
+    /* === How It Works === */
+    .how-section {
+      padding: 120px 0;
       background: white;
       border-top: 1px solid var(--border);
     }
-    .features-grid {
+    .section-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-primary);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 44px;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      text-align: center;
+      gap: 48px;
     }
-    .feature-icon {
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
       width: 56px; height: 56px;
       background: var(--bg-secondary);
       border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px;
+      font-family: 'Satoshi', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
       color: var(--accent-primary);
+      margin: 0 auto 24px;
     }
-    .feature-title {
-      font-family: 'Satoshi';
-      font-size: 20px;
-      font-weight: 700;
+    .step-title {
+      font-size: 22px;
       margin-bottom: 12px;
     }
-    .feature-desc {
-      color: var(--text-muted);
+    .step-desc {
       font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .step-connector {
+      position: absolute;
+      top: 28px;
+      left: calc(50% + 48px);
+      width: calc(100% - 96px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--border) 0%, var(--border) 50%, transparent 50%);
+      background-size: 12px 2px;
+    }
+    .step:last-child .step-connector { display: none; }
+
+    /* === Features === */
+    .features-section {
+      padding: 120px 0;
+      background: var(--bg-page);
     }
 
-    /* === CTA Section === */
-    .cta-section {
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-bottom: 120px;
+    }
+    .feature-row:last-child { margin-bottom: 0; }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+
+    .feature-content {
+      max-width: 480px;
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: var(--accent-surface);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-primary);
+      margin-bottom: 24px;
+    }
+    .feature-icon i { width: 24px; height: 24px; }
+    .feature-title {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+    .feature-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .feature-list {
+      list-style: none;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .feature-list li i {
+      width: 20px; height: 20px;
+      color: var(--accent-primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .feature-visual {
+      border-radius: 20px;
+      box-shadow: 
+        0 30px 80px -20px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(0,0,0,0.04);
+      overflow: hidden;
+      background: white;
+    }
+    .feature-visual iframe {
+      width: 100%;
+      height: 620px;
+      border: none;
+      display: block;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* === Social Proof === */
+    .proof-section {
       padding: 100px 0;
+      background: white;
+      border-top: 1px solid var(--border);
       text-align: center;
     }
+    .proof-quote {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 32px;
+      font-weight: 500;
+      max-width: 700px;
+      margin: 0 auto 32px;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+    .proof-author {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .proof-avatar {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent-surface) 0%, var(--bg-secondary) 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .proof-info {
+      text-align: left;
+    }
+    .proof-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .proof-role {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* === CTA === */
+    .cta-section {
+      padding: 120px 0;
+      background: var(--bg-page);
+    }
     .cta-card {
-      background: var(--text-main);
-      color: white;
-      border-radius: 24px;
-      padding: 64px 24px;
+      background: linear-gradient(135deg, var(--text-main) 0%, #1a1a1a 100%);
+      border-radius: 32px;
+      padding: 80px 40px;
+      text-align: center;
       position: relative;
       overflow: hidden;
     }
+    .cta-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--accent-primary) 0%, transparent 60%);
+      opacity: 0.15;
+      top: -200px;
+      left: -100px;
+    }
+    .cta-glow.two {
+      top: auto;
+      bottom: -200px;
+      left: auto;
+      right: -100px;
+    }
     .cta-title {
-      font-family: 'Satoshi';
-      font-size: 40px;
-      font-weight: 700;
-      margin-bottom: 16px;
+      font-size: 48px;
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
     }
     .cta-text {
       font-size: 18px;
       color: rgba(255,255,255,0.7);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 480px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
     }
     .btn-white {
       background: white;
       color: var(--text-main);
     }
     .btn-white:hover {
-      background: var(--bg-page);
+      background: var(--bg-secondary);
     }
-    
-    /* Blob for CTA */
-    .cta-blob {
-      position: absolute;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, var(--accent-primary) 0%, rgba(255,255,255,0) 70%);
-      opacity: 0.3;
-      top: -50%; left: -10%;
+    .btn-ghost-white {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .btn-ghost-white:hover {
+      background: rgba(255,255,255,0.1);
     }
 
     /* === Footer === */
     .footer {
-      padding: 40px 0;
+      padding: 60px 0;
       border-top: 1px solid var(--border);
-      text-align: center;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-logo .logo-mark {
+      width: 24px; height: 24px;
+      font-size: 10px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+    .footer-links a {
       font-size: 14px;
       color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-main); }
+    .footer-copy {
+      font-size: 14px;
+      color: var(--text-light);
     }
 
+    /* === Responsive === */
+    @media (max-width: 900px) {
+      .hero-title { font-size: 44px; }
+      .section-title { font-size: 36px; }
+      .feature-row { grid-template-columns: 1fr; gap: 40px; }
+      .feature-row.reverse { direction: ltr; }
+      .steps-grid { grid-template-columns: 1fr; gap: 40px; }
+      .step-connector { display: none; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -350,13 +536,18 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-inner">
-      <div class="logo">
+      <a href="#" class="logo">
         <div class="logo-mark">S3</div>
         Sesame3
+      </a>
+      <div class="nav-links">
+        <a href="#how">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
       </div>
-      <div style="display: flex; gap: 16px; align-items: center;">
-        <a href="#" class="btn btn-ghost" style="font-size: 14px;">Log in</a>
-        <a href="#" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Get Started</a>
+      <div class="nav-cta">
+        <a href="#" class="btn btn-secondary">Log in</a>
+        <a href="#" class="btn btn-primary">Get Started Free</a>
       </div>
     </div>
   </nav>
@@ -366,90 +557,166 @@
     <div class="container">
       <div class="hero-badge">
         <i data-lucide="sparkles"></i>
-        <span>Now in Early Access</span>
+        AI-Powered College Counseling
       </div>
       <h1 class="hero-title">
-        College prep without<br>the <span>panic</span>.
+        Your personal advisor for the <span class="highlight">college journey</span>
       </h1>
       <p class="hero-subtitle">
-        Turn the chaos of admissions into a calm, focused plan.
-        We help you find your path one step at a time.
+        Get expert guidance, honest chance assessments, and a clear roadmap — all through a conversation with an AI that knows you.
       </p>
       <div class="hero-actions">
-        <a href="#" class="btn btn-primary">Start your calm journey</a>
-        <a href="#" class="btn btn-ghost">
-          <i data-lucide="play-circle" style="width: 18px;"></i>
-          How it works
+        <a href="#" class="btn btn-primary">
+          <i data-lucide="message-circle"></i>
+          Start Chatting Free
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <i data-lucide="play-circle"></i>
+          See How It Works
         </a>
       </div>
 
-      <!-- Hero Image / Product Mock -->
-      <div class="product-preview">
-        <div class="preview-browser">
-          <div class="preview-dot"></div><div class="preview-dot"></div><div class="preview-dot"></div>
-        </div>
-        <div class="preview-ui">
-          <!-- Sidebar Mock -->
-          <div class="preview-sidebar">
-            <div class="preview-line" style="width: 40px; height: 40px; border-radius: 8px; margin-bottom: 32px;"></div>
-            <div class="preview-line"></div>
-            <div class="preview-line short"></div>
-            <div class="preview-line short" style="margin-top: 24px;"></div>
-            <div class="preview-line"></div>
-          </div>
-          <!-- Main Area Mock -->
-          <div class="preview-main">
-            <h3 style="font-family: 'Satoshi'; font-size: 24px; font-weight: 700; margin-bottom: 24px; color: var(--text-main);">Good morning, Rohan.</h3>
-            
-            <!-- Focus Card -->
-            <div class="mock-focus-card">
-              <div class="mock-circle"><i data-lucide="target"></i></div>
-              <div class="mock-content">
-                <div class="mock-title">Submit Stanford SIMR</div>
-                <div class="mock-text" style="width: 100%;"></div>
-                <div class="mock-text" style="width: 60%;"></div>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 24px;">
-              <div style="flex: 2; height: 100px; background: white; border: 1px solid var(--border); border-radius: 12px;"></div>
-              <div style="flex: 1; height: 100px; background: white; border: 1px solid var(--border); border-radius: 12px;"></div>
-            </div>
-
-            <!-- Floating Elements -->
-            <div class="float-card one">
-              <i data-lucide="check-circle" style="color: var(--accent-primary); width: 16px;"></i>
-              Essay Draft Done
-            </div>
-            <div class="float-card two">
-              <i data-lucide="trending-up" style="color: var(--accent-primary); width: 16px;"></i>
-              Rising Steady
-            </div>
-
-          </div>
+      <div class="hero-screenshot">
+        <div class="hero-screenshot-inner">
+          <iframe src="assets/hero-screenshot.html" loading="lazy" scrolling="no"></iframe>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Value Props -->
-  <section class="features">
+  <!-- How It Works -->
+  <section class="how-section" id="how">
     <div class="container">
-      <div class="features-grid">
-        <div>
-          <div class="feature-icon"><i data-lucide="target"></i></div>
-          <h3 class="feature-title">Focus on the "One Thing"</h3>
-          <p class="feature-desc">Stop juggling 50 tasks. We identify your highest-impact action right now and help you get it done.</p>
+      <div class="section-header">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Three steps to clarity</h2>
+        <p class="section-subtitle">No forms to fill. Just have a conversation.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-connector"></div>
+          <h3 class="step-title">Tell your story</h3>
+          <p class="step-desc">Share your interests, experiences, and dreams. Our AI listens and builds a complete picture of who you are.</p>
         </div>
-        <div>
-          <div class="feature-icon"><i data-lucide="coffee"></i></div>
-          <h3 class="feature-title">A Calm Workspace</h3>
-          <p class="feature-desc">No red alerts or scary deadlines. Just a quiet, organized space to clear your mind and work.</p>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-connector"></div>
+          <h3 class="step-title">Get honest insights</h3>
+          <p class="step-desc">See your real chances at any school, understand where you're strong, and know exactly what to improve.</p>
         </div>
-        <div>
-          <div class="feature-icon"><i data-lucide="map"></i></div>
-          <h3 class="feature-title">See Your Path</h3>
-          <p class="feature-desc">Watch your progress unfold visually. Know exactly where you stand without the guesswork.</p>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Follow your roadmap</h3>
+          <p class="step-desc">Get personalized tasks and deadlines. Focus on one thing at a time. Stay calm, stay on track.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features-section" id="features">
+    <div class="container">
+
+      <!-- Feature 1: AI Advisor -->
+      <div class="feature-row">
+        <div class="feature-content">
+          <div class="feature-icon">
+            <i data-lucide="sparkles"></i>
+          </div>
+          <h2 class="feature-title">An advisor who truly knows you</h2>
+          <p class="feature-desc">
+            Forget generic advice. Ask anything — from "Should I apply ED to Yale?" to "How do I write about my research?" — and get personalized answers based on your full profile.
+          </p>
+          <ul class="feature-list">
+            <li><i data-lucide="check"></i> Strategic guidance tailored to your strengths</li>
+            <li><i data-lucide="check"></i> Voice and text — chat however you're comfortable</li>
+            <li><i data-lucide="check"></i> Available 24/7, infinitely patient</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <iframe src="assets/feature-advisor.html" loading="lazy" scrolling="no"></iframe>
+        </div>
+      </div>
+
+      <!-- Feature 2: Chances -->
+      <div class="feature-row reverse">
+        <div class="feature-content">
+          <div class="feature-icon">
+            <i data-lucide="target"></i>
+          </div>
+          <h2 class="feature-title">Know your real chances</h2>
+          <p class="feature-desc">
+            No guesswork, no sugar-coating. See how you compare to typical admits at each school, understand exactly where you're strong or falling short, and get actionable advice on how to improve.
+          </p>
+          <ul class="feature-list">
+            <li><i data-lucide="check"></i> Factor-by-factor breakdown against admits</li>
+            <li><i data-lucide="check"></i> Clear reach, target, and safety tiers</li>
+            <li><i data-lucide="check"></i> Personalized recommendations to close gaps</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <iframe src="assets/feature-chances.html" loading="lazy" scrolling="no"></iframe>
+        </div>
+      </div>
+
+      <!-- Feature 3: Schools -->
+      <div class="feature-row">
+        <div class="feature-content">
+          <div class="feature-icon">
+            <i data-lucide="school"></i>
+          </div>
+          <h2 class="feature-title">Build a balanced list</h2>
+          <p class="feature-desc">
+            Stop obsessing over one dream school. Build a smart, balanced list with reaches, targets, and safeties — and track every application from start to finish.
+          </p>
+          <ul class="feature-list">
+            <li><i data-lucide="check"></i> Visual balance of reach/target/safety schools</li>
+            <li><i data-lucide="check"></i> AI-suggested schools based on your fit</li>
+            <li><i data-lucide="check"></i> Application status tracking</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <iframe src="assets/feature-schools.html" loading="lazy" scrolling="no"></iframe>
+        </div>
+      </div>
+
+      <!-- Feature 4: Roadmap -->
+      <div class="feature-row reverse">
+        <div class="feature-content">
+          <div class="feature-icon">
+            <i data-lucide="map"></i>
+          </div>
+          <h2 class="feature-title">One thing at a time</h2>
+          <p class="feature-desc">
+            College apps are overwhelming. We break it down into clear goals, simple tasks, and a timeline that keeps you focused — not frantic.
+          </p>
+          <ul class="feature-list">
+            <li><i data-lucide="check"></i> Personalized goals based on your deadlines</li>
+            <li><i data-lucide="check"></i> Daily focus: just tackle the next thing</li>
+            <li><i data-lucide="check"></i> AI tips to help you move faster</li>
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <iframe src="assets/feature-roadmap.html" loading="lazy" scrolling="no"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="proof-section">
+    <div class="container">
+      <p class="proof-quote">
+        "It's like having a brilliant counselor in my pocket. I finally feel like I know what I'm doing."
+      </p>
+      <div class="proof-author">
+        <div class="proof-avatar">👩‍🎓</div>
+        <div class="proof-info">
+          <div class="proof-name">Sarah K.</div>
+          <div class="proof-role">High School Junior, California</div>
         </div>
       </div>
     </div>
@@ -459,18 +726,39 @@
   <section class="cta-section">
     <div class="container">
       <div class="cta-card">
-        <div class="cta-blob"></div>
-        <h2 class="cta-title">Ready to breathe easier?</h2>
-        <p class="cta-text">Join thousands of students who are taking control of their future, one calm step at a time.</p>
-        <a href="#" class="btn btn-white">Get Started for Free</a>
+        <div class="cta-glow"></div>
+        <div class="cta-glow two"></div>
+        <h2 class="cta-title">Ready to start your journey?</h2>
+        <p class="cta-text">
+          Join students who are navigating college admissions with clarity and calm. It's free to get started.
+        </p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-white">
+            <i data-lucide="arrow-right"></i>
+            Get Started Free
+          </a>
+          <a href="#" class="btn btn-ghost-white">Talk to Us</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="container">
-      <p>&copy; 2025 Sesame3. Built for peace of mind.</p>
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <div class="logo-mark">S3</div>
+        Sesame3
+      </div>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Sesame3
+      </div>
     </div>
   </footer>
 
