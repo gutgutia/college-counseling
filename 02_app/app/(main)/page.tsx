@@ -640,7 +640,7 @@ function FilledProfileCard({ profile }: { profile: StudentProfile }) {
           <GraduationCap className="w-5 h-5 text-accent-primary" />
           Your Profile
         </h3>
-        <Link href="/portfolio" className="text-sm text-accent-primary hover:underline">View full</Link>
+        <Link href="/profile" className="text-sm text-accent-primary hover:underline">View full</Link>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {profile.academics?.gpaUnweighted && (

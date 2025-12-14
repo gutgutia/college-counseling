@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, Compass, Briefcase, BookOpen, Search } from "lucide-react";
+import { LayoutGrid, Compass, User, BookOpen, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", href: "/", icon: LayoutGrid },
   { name: "Plan", href: "/plan", icon: Compass },
-  { name: "Portfolio", href: "/portfolio", icon: Briefcase },
+  { name: "Profile", href: "/profile", icon: User },
   { name: "Schools", href: "/schools", icon: BookOpen },
   { name: "Discover", href: "/discover", icon: Search },
 ];

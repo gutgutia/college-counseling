@@ -8,8 +8,8 @@ export function PillarSnapshot() {
     <div className="bg-bg-card border border-border-subtle rounded-2xl p-6 shadow-card">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-display font-bold text-lg">Profile Snapshot</h3>
-        <Link href="/portfolio" className="text-[13px] font-medium text-accent-primary hover:underline">
-          View Portfolio
+        <Link href="/profile" className="text-[13px] font-medium text-accent-primary hover:underline">
+          View Profile
         </Link>
       </div>
 

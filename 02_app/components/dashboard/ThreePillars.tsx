@@ -44,7 +44,7 @@ function ProfilePillar({ profile }: { profile: StudentProfile }) {
           </div>
           <h3 className="font-display font-bold text-base">Profile</h3>
         </div>
-        <Link href="/portfolio" className="text-xs text-accent-primary hover:underline flex items-center gap-0.5">
+        <Link href="/profile" className="text-xs text-accent-primary hover:underline flex items-center gap-0.5">
           View <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
