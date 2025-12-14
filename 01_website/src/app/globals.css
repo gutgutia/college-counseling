@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ============================================
+   SESAME3 DESIGN SYSTEM TOKENS
+============================================ */
+:root {
+  /* Background Colors */
+  --s3-bg-primary: #0A0A0A;
+  --s3-bg-secondary: #111111;
+  --s3-bg-elevated: #1A1A1A;
+  --s3-bg-surface: #222222;
+  
+  /* Border Colors */
+  --s3-border: rgba(255, 255, 255, 0.08);
+  --s3-border-hover: rgba(255, 255, 255, 0.15);
+  --s3-border-active: rgba(255, 255, 255, 0.25);
+  
+  /* Text Colors */
+  --s3-text-primary: #FFFFFF;
+  --s3-text-secondary: #888888;
+  --s3-text-muted: #555555;
+  --s3-text-inverse: #000000;
+  
+  /* Brand Accent (Cyan) */
+  --s3-cyan: #00E5FF;
+  --s3-cyan-hover: #4DFFFF;
+  --s3-cyan-active: #00B8CC;
+  --s3-cyan-subtle: rgba(0, 229, 255, 0.12);
+  --s3-cyan-glow: rgba(0, 229, 255, 0.3);
+  
+  /* Semantic Colors */
+  --s3-success: #22C55E;
+  --s3-success-subtle: rgba(34, 197, 94, 0.12);
+  --s3-warning: #FACC15;
+  --s3-warning-subtle: rgba(250, 204, 21, 0.12);
+  --s3-error: #EF4444;
+  --s3-error-subtle: rgba(239, 68, 68, 0.12);
+  --s3-info: #3B82F6;
+  --s3-info-subtle: rgba(59, 130, 246, 0.12);
+  
+  /* Spacing */
+  --s3-space-1: 4px;
+  --s3-space-2: 8px;
+  --s3-space-3: 12px;
+  --s3-space-4: 16px;
+  --s3-space-5: 20px;
+  --s3-space-6: 24px;
+  --s3-space-8: 32px;
+  --s3-space-10: 40px;
+  --s3-space-12: 48px;
+  --s3-space-16: 64px;
+  --s3-space-20: 80px;
+  
+  /* Radius */
+  --s3-radius-sm: 4px;
+  --s3-radius-md: 8px;
+  --s3-radius-lg: 12px;
+  --s3-radius-xl: 16px;
+  --s3-radius-full: 9999px;
+  
+  /* Shadows */
+  --s3-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --s3-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --s3-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --s3-shadow-cyan: 0 8px 30px rgba(0, 229, 255, 0.3);
+}
+
+@theme inline {
+  --color-background: var(--s3-bg-primary);
+  --color-foreground: var(--s3-text-primary);
+  
+  /* Custom colors for Tailwind */
+  --color-s3-bg-primary: var(--s3-bg-primary);
+  --color-s3-bg-secondary: var(--s3-bg-secondary);
+  --color-s3-bg-elevated: var(--s3-bg-elevated);
+  --color-s3-bg-surface: var(--s3-bg-surface);
+  
+  --color-s3-cyan: var(--s3-cyan);
+  --color-s3-cyan-hover: var(--s3-cyan-hover);
+  --color-s3-cyan-subtle: var(--s3-cyan-subtle);
+  
+  --color-s3-text-primary: var(--s3-text-primary);
+  --color-s3-text-secondary: var(--s3-text-secondary);
+  --color-s3-text-muted: var(--s3-text-muted);
+  --color-s3-text-inverse: var(--s3-text-inverse);
+  
+  --color-s3-border: var(--s3-border);
+  --color-s3-border-hover: var(--s3-border-hover);
+  
+  --color-s3-success: var(--s3-success);
+  --color-s3-warning: var(--s3-warning);
+  --color-s3-error: var(--s3-error);
+  
+  /* Fonts */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--s3-text-primary);
+  background: var(--s3-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display font class */
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+/* Mono font class */
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
+/* Selection color */
+::selection {
+  background: var(--s3-cyan-subtle);
+  color: var(--s3-text-primary);
+}
