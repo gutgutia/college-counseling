@@ -11,6 +11,7 @@ dist/
 .env
 .env.local
 .env.*.local
+.env.example
 
 # IDE
 .idea/
@@ -30,4 +31,7 @@ yarn-error.log*
 # Misc
 *.pem
 *.tsbuildinfo
+
+# Prisma
+prisma/migrations/.migration_lock.toml
 
