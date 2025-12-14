@@ -159,43 +159,53 @@ const MOCK_PROFILES: Record<number, StudentProfile> = {
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const zoneOverride = searchParams.get("zone"); // For prototyping
+  const zoneOverride = searchParams.get("zone"); // For prototyping specific zones
+  const isNewUser = searchParams.get("new") === "true"; // From onboarding redirect
   const [profile, setProfile] = useState<StudentProfile>({});
   const [zoneStatus, setZoneStatus] = useState<ZoneStatus | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMockData, setIsMockData] = useState(false);
 
-  // Load profile data - default to Zone 3 mock for prototype demo
+  // Load profile data
   useEffect(() => {
     let profileToUse: StudentProfile;
     let zoneStatusToUse: ZoneStatus;
-    let usingMock = true;
+    let usingMock = false;
     
     if (zoneOverride !== null) {
-      // Use mock data for the specified zone
+      // Use mock data for the specified zone (for prototyping)
       const overrideZone = parseInt(zoneOverride) as DashboardZone;
       if (overrideZone >= 0 && overrideZone <= 3) {
         profileToUse = MOCK_PROFILES[overrideZone];
         zoneStatusToUse = calculateZone(profileToUse);
         zoneStatusToUse.zone = overrideZone; // Force the zone
+        usingMock = true;
       } else {
-        // Invalid zone, default to Zone 3
+        // Invalid zone, default to Zone 3 mock
         profileToUse = MOCK_PROFILES[3];
         zoneStatusToUse = calculateZone(profileToUse);
         zoneStatusToUse.zone = 3;
+        usingMock = true;
       }
+    } else if (isNewUser) {
+      // New user from onboarding - show Zone 0 (getting started)
+      profileToUse = MOCK_PROFILES[0];
+      zoneStatusToUse = calculateZone(profileToUse);
+      zoneStatusToUse.zone = 0;
+      usingMock = true;
     } else {
-      // Default: Use Zone 3 mock profile (full active dashboard)
+      // Default homepage: Use Zone 3 mock profile (full active dashboard for demo)
       profileToUse = MOCK_PROFILES[3];
       zoneStatusToUse = calculateZone(profileToUse);
       zoneStatusToUse.zone = 3;
+      usingMock = true;
     }
     
     setProfile(profileToUse);
     setZoneStatus(zoneStatusToUse);
     setIsMockData(usingMock);
     setIsLoaded(true);
-  }, [zoneOverride]);
+  }, [zoneOverride, isNewUser]);
 
   // Don't render until we've loaded the data (prevents flash)
   if (!isLoaded || !zoneStatus) {
