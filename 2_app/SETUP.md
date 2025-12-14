@@ -39,17 +39,24 @@ DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pool
 DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
 
 # =============================================================================
-# AI PROVIDERS (add when ready)
+# AI PROVIDERS
 # =============================================================================
 
-# OpenAI
-OPENAI_API_KEY=sk-...
-
-# Anthropic
+# Anthropic (Claude Opus/Sonnet/Haiku 4.5)
+# Get from: https://console.anthropic.com/
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Groq (for fast inference)
+# OpenAI (GPT-5.1, GPT-5-mini)
+# Get from: https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-...
+
+# Groq (Kimi K2, Qwen 32B - ultra-fast inference)
+# Get from: https://console.groq.com/
 GROQ_API_KEY=gsk_...
+
+# Google Gemini (Gemini 3 Pro Preview)
+# Get from: https://aistudio.google.com/apikey
+GOOGLE_GENERATIVE_AI_API_KEY=...
 ```
 
 ---
@@ -118,12 +125,21 @@ Open http://localhost:3000
 ```
 2_app/
 ├── app/                    # Next.js App Router
-│   ├── (main)/            # Authenticated routes
+│   ├── (main)/            # Main app routes
+│   ├── api/               # API routes
+│   │   ├── chat/          # AI chat endpoint
+│   │   └── profile/       # Profile CRUD APIs
 │   ├── auth/              # Auth pages
 │   ├── login/             # Login page
 │   └── onboarding/        # Onboarding flow
 ├── components/            # React components
 ├── lib/                   # Utilities
+│   ├── ai/               # AI configuration
+│   │   ├── providers.ts  # Model definitions
+│   │   ├── tools.ts      # Tool definitions
+│   │   ├── tool-handlers.ts # Tool execution
+│   │   └── prompts.ts    # System prompts
+│   ├── auth.ts           # Auth helpers
 │   ├── db.ts             # Prisma client
 │   ├── supabase/         # Supabase clients
 │   └── utils.ts          # Helper functions
