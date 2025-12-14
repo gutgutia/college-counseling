@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feature Screenshot - Your Roadmap</title>
+  <title>Feature - Your Roadmap</title>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,166 +27,128 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #F5F5F5;
-      padding: 40px;
+      background: linear-gradient(135deg, #F5F5F5 0%, #EDECEA 100%);
+      padding: 60px 40px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
 
-    .screenshot-container {
+    .card {
       background: var(--bg-card);
-      border-radius: 16px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+      border-radius: 24px;
+      box-shadow: 
+        0 25px 80px -20px rgba(0,0,0,0.15),
+        0 10px 30px -10px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(0,0,0,0.03);
       overflow: hidden;
-      max-width: 700px;
+      max-width: 520px;
       width: 100%;
     }
 
-    .browser-bar {
-      background: #F5F4F2;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .browser-dot.red { background: #FF5F57; }
-    .browser-dot.yellow { background: #FFBD2E; }
-    .browser-dot.green { background: #28CA42; }
-
-    .content {
-      padding: 32px;
-      background: var(--bg-app);
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .header-icon {
-      width: 48px; height: 48px;
-      background: var(--accent-surface);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-primary);
-    }
-    .header h2 {
-      font-family: 'Satoshi', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    .header p {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .goal-card {
-      background: white;
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    }
-    .goal-card.active {
-      border-color: var(--accent-primary);
-      box-shadow: 0 4px 12px rgba(18, 117, 106, 0.1);
-    }
-
     .goal-header {
-      padding: 16px 20px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border-subtle);
+      gap: 14px;
     }
     .goal-emoji {
-      font-size: 24px;
+      font-size: 32px;
     }
     .goal-info {
       flex: 1;
     }
     .goal-title {
       font-family: 'Satoshi', sans-serif;
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--text-main);
     }
     .goal-meta {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 2px;
+      margin-top: 4px;
     }
     .goal-badge {
       font-size: 11px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 100px;
       background: var(--accent-surface);
       color: var(--accent-primary);
     }
-    .goal-badge.planned {
-      background: var(--bg-sidebar);
-      color: var(--text-muted);
-    }
 
     .goal-tasks {
-      padding: 16px 20px;
+      padding: 24px 28px;
     }
+    
     .task-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 0;
+      gap: 12px;
+      padding: 14px 0;
       border-bottom: 1px solid var(--border-subtle);
     }
     .task-item:last-child {
       border-bottom: none;
     }
     .task-checkbox {
-      width: 20px; height: 20px;
-      border-radius: 6px;
+      width: 22px; height: 22px;
+      border-radius: 7px;
       border: 2px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .task-checkbox.done {
       background: var(--accent-primary);
       border-color: var(--accent-primary);
       color: white;
     }
-    .task-checkbox i { width: 12px; height: 12px; }
-    .task-text {
+    .task-checkbox i { width: 14px; height: 14px; }
+    .task-content {
       flex: 1;
-      font-size: 14px;
+    }
+    .task-text {
+      font-size: 15px;
+      font-weight: 500;
       color: var(--text-main);
     }
     .task-text.done {
       color: var(--text-muted);
       text-decoration: line-through;
     }
-    .task-due {
+    .task-sub {
       font-size: 12px;
       color: var(--text-light);
+      margin-top: 2px;
+    }
+    .task-due {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-light);
+      padding: 4px 10px;
+      background: var(--bg-sidebar);
+      border-radius: 6px;
+    }
+    .task-due.today {
+      background: var(--accent-surface);
+      color: var(--accent-primary);
     }
 
+    .progress-section {
+      padding: 0 28px 24px;
+    }
     .progress-bar {
-      height: 6px;
+      height: 8px;
       background: var(--bg-sidebar);
       border-radius: 100px;
-      margin-top: 12px;
       overflow: hidden;
     }
     .progress-fill {
@@ -194,137 +156,119 @@
       background: var(--accent-primary);
       border-radius: 100px;
     }
-
-    .suggestion-card {
-      background: linear-gradient(135deg, var(--accent-surface) 0%, white 100%);
-      border: 1px solid var(--accent-border);
-      border-radius: 12px;
-      padding: 16px 20px;
+    .progress-label {
       display: flex;
-      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ai-nudge {
+      margin: 0 28px 24px;
+      background: var(--accent-surface);
+      border: 1px solid var(--accent-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
       gap: 12px;
     }
-    .suggestion-icon {
-      width: 40px; height: 40px;
-      background: white;
+    .nudge-icon {
+      width: 32px; height: 32px;
+      background: var(--accent-primary);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--accent-primary);
+      color: white;
+      flex-shrink: 0;
     }
-    .suggestion-text {
+    .nudge-icon i { width: 16px; height: 16px; }
+    .nudge-content {
       flex: 1;
     }
-    .suggestion-text strong {
-      display: block;
-      font-size: 14px;
-      color: var(--text-main);
-      margin-bottom: 2px;
-    }
-    .suggestion-text span {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .suggestion-action {
+    .nudge-title {
       font-size: 13px;
       font-weight: 600;
       color: var(--accent-primary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .nudge-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
 
-  <div class="screenshot-container">
-    <div class="browser-bar">
-      <div class="browser-dot red"></div>
-      <div class="browser-dot yellow"></div>
-      <div class="browser-dot green"></div>
+  <div class="card">
+    <div class="goal-header">
+      <div class="goal-emoji">🔬</div>
+      <div class="goal-info">
+        <div class="goal-title">Apply to SIMR Summer Research</div>
+        <div class="goal-meta">
+          <span>Stanford Medicine</span>
+          <span>·</span>
+          <span>Due Jan 15</span>
+        </div>
+      </div>
+      <div class="goal-badge">Active</div>
     </div>
 
-    <div class="content">
-      <div class="header">
-        <div class="header-icon">
-          <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
+    <div class="goal-tasks">
+      <div class="task-item">
+        <div class="task-checkbox done"><i data-lucide="check"></i></div>
+        <div class="task-content">
+          <div class="task-text done">Draft personal statement</div>
         </div>
-        <div>
-          <h2>Your Roadmap</h2>
-          <p>Know exactly what to do and when</p>
-        </div>
+        <div class="task-due">Done</div>
       </div>
 
-      <!-- Active Goal -->
-      <div class="goal-card active">
-        <div class="goal-header">
-          <div class="goal-emoji">🔬</div>
-          <div class="goal-info">
-            <div class="goal-title">Apply to SIMR Summer Research</div>
-            <div class="goal-meta">
-              <span>Research</span>
-              <span>·</span>
-              <span>Due Jan 15</span>
-            </div>
-          </div>
-          <div class="goal-badge">Active</div>
+      <div class="task-item">
+        <div class="task-checkbox done"><i data-lucide="check"></i></div>
+        <div class="task-content">
+          <div class="task-text done">Request recommendation from Dr. Chen</div>
         </div>
-        <div class="goal-tasks">
-          <div class="task-item">
-            <div class="task-checkbox done"><i data-lucide="check"></i></div>
-            <div class="task-text done">Draft Essay 1</div>
-            <div class="task-due">Done</div>
-          </div>
-          <div class="task-item">
-            <div class="task-checkbox done"><i data-lucide="check"></i></div>
-            <div class="task-text done">Request recommendation letter</div>
-            <div class="task-due">Done</div>
-          </div>
-          <div class="task-item">
-            <div class="task-checkbox"></div>
-            <div class="task-text">Draft Essay 2</div>
-            <div class="task-due">Today</div>
-          </div>
-          <div class="task-item">
-            <div class="task-checkbox"></div>
-            <div class="task-text">Upload transcript</div>
-            <div class="task-due">Jan 10</div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 50%;"></div>
-          </div>
-        </div>
+        <div class="task-due">Done</div>
       </div>
 
-      <!-- Planned Goal -->
-      <div class="goal-card">
-        <div class="goal-header">
-          <div class="goal-emoji">🏆</div>
-          <div class="goal-info">
-            <div class="goal-title">Qualify for USAMO</div>
-            <div class="goal-meta">
-              <span>Competition</span>
-              <span>·</span>
-              <span>Feb 8</span>
-            </div>
-          </div>
-          <div class="goal-badge planned">Planned</div>
+      <div class="task-item">
+        <div class="task-checkbox"></div>
+        <div class="task-content">
+          <div class="task-text">Write research interest essay</div>
+          <div class="task-sub">500 words on your proposed research direction</div>
         </div>
+        <div class="task-due today">Today</div>
       </div>
 
-      <!-- AI Suggestion -->
-      <div class="suggestion-card">
-        <div class="suggestion-icon">
-          <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
+      <div class="task-item">
+        <div class="task-checkbox"></div>
+        <div class="task-content">
+          <div class="task-text">Upload transcript</div>
         </div>
-        <div class="suggestion-text">
-          <strong>Suggested: Science Olympiad Regionals</strong>
-          <span>Matches your physics interest and strengthens awards</span>
-        </div>
-        <div class="suggestion-action">
-          Add <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
-        </div>
+        <div class="task-due">Jan 10</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 50%;"></div>
+      </div>
+      <div class="progress-label">
+        <span>2 of 4 tasks complete</span>
+        <span>50%</span>
+      </div>
+    </div>
+
+    <div class="ai-nudge">
+      <div class="nudge-icon">
+        <i data-lucide="sparkles"></i>
+      </div>
+      <div class="nudge-content">
+        <div class="nudge-title">Advisor tip</div>
+        <div class="nudge-text">Lead your research essay with your robotics work — it connects to biomedical engineering, which SIMR values.</div>
       </div>
     </div>
   </div>
