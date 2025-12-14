@@ -55,6 +55,15 @@ export type Goal = {
   tasks?: Task[];
 };
 
+export type AboutMe = {
+  story?: string;           // Free-form "tell me about yourself"
+  values?: string[];        // ["curiosity", "justice", "creativity"]
+  interests?: string[];     // ["space", "music", "philosophy"]
+  personality?: string;     // "curious introvert" / "outgoing leader"
+  background?: string;      // Family/cultural context
+  aspirations?: string;     // What they want to become
+};
+
 export type StudentProfile = {
   // From onboarding
   onboarding?: {
@@ -64,6 +73,9 @@ export type StudentProfile = {
     dreamSchool?: string;
     hasDreamSchool?: boolean;
   };
+  
+  // About Me - who they are as a person
+  aboutMe?: AboutMe;
   
   // Academics
   academics?: {
@@ -196,6 +208,7 @@ export type ZoneStatus = {
     profile: { filled: boolean; hasAcademics: boolean; hasActivities: boolean; hasAwards: boolean };
     goals: { filled: boolean; count: number };
   };
+  hasStory: boolean;
   filledCount: number;
   nextSteps: string[];
 };
@@ -213,6 +226,9 @@ export function calculateZone(profile: StudentProfile): ZoneStatus {
   const hasGoals = (profile.goals?.length || 0) > 0;
   const goalCount = profile.goals?.length || 0;
   
+  // Check if they have shared their story
+  const hasStory = !!(profile.aboutMe?.story && profile.aboutMe.story.length > 20);
+  
   // Count filled areas
   const filledAreas = [hasSchools, hasProfile, hasGoals].filter(Boolean).length;
   
@@ -228,6 +244,7 @@ export function calculateZone(profile: StudentProfile): ZoneStatus {
   
   // Determine next steps
   const nextSteps: string[] = [];
+  if (!hasStory) nextSteps.push("Tell us about yourself");
   if (!hasSchools) nextSteps.push("Add schools to your list");
   if (!hasAcademics) nextSteps.push("Add your GPA or test scores");
   if (!hasActivities) nextSteps.push("Add your activities");
@@ -240,6 +257,7 @@ export function calculateZone(profile: StudentProfile): ZoneStatus {
       profile: { filled: hasProfile, hasAcademics, hasActivities, hasAwards },
       goals: { filled: hasGoals, count: goalCount },
     },
+    hasStory,
     filledCount: filledAreas,
     nextSteps,
   };

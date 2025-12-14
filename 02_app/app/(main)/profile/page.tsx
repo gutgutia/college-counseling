@@ -88,6 +88,13 @@ const MOCK_PROGRAMS = [
   { id: "2", name: "Stanford SIMR", status: "Applying", year: "2025" },
 ];
 
+const MOCK_ABOUT_ME = {
+  story: "I've always been fascinated by how things work. When I was 10, I took apart my family's broken microwave just to see the components inside. That curiosity led me to robotics, where I discovered I love the intersection of engineering and teaching others. Running EduAccess has shown me that making knowledge accessible can change lives. I want to build technology that empowers people who've been overlooked.",
+  values: ["Curiosity", "Equity", "Persistence"],
+  interests: ["Robotics", "Math", "Teaching", "Space Exploration"],
+  personality: "Curious introvert who comes alive when explaining complex ideas",
+};
+
 // ============================================================================
 // MAIN PAGE
 // ============================================================================
@@ -98,6 +105,7 @@ export default function ProfilePage() {
   const [activities, setActivities] = useState(MOCK_ACTIVITIES);
   const [awards, setAwards] = useState(MOCK_AWARDS);
   const [programs, setPrograms] = useState(MOCK_PROGRAMS);
+  const [aboutMe, setAboutMe] = useState(MOCK_ABOUT_ME);
 
   return (
     <>
@@ -118,11 +126,14 @@ export default function ProfilePage() {
       {/* Subtle Chat Prompt */}
       <Link 
         href="/advisor?mode=profile" 
-        className="flex items-center gap-2 text-sm text-text-muted hover:text-accent-primary transition-colors mb-8 group"
+        className="flex items-center gap-2 text-sm text-text-muted hover:text-accent-primary transition-colors mb-6 group"
       >
         <MessageCircle className="w-4 h-4" />
         <span>Need help building your profile? <span className="text-accent-primary group-hover:underline">Chat with your advisor →</span></span>
       </Link>
+
+      {/* About Me Section */}
+      <AboutMeCard aboutMe={aboutMe} onUpdate={setAboutMe} />
 
       {/* Profile Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -144,6 +155,108 @@ export default function ProfilePage() {
         
       </div>
     </>
+  );
+}
+
+// ============================================================================
+// ABOUT ME CARD
+// ============================================================================
+
+function AboutMeCard({ aboutMe, onUpdate }: { aboutMe: typeof MOCK_ABOUT_ME | null; onUpdate: (a: typeof MOCK_ABOUT_ME) => void }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempStory, setTempStory] = useState(aboutMe?.story || "");
+
+  const handleSave = () => {
+    onUpdate({ ...aboutMe, story: tempStory } as typeof MOCK_ABOUT_ME);
+    setIsEditing(false);
+  };
+
+  // If no story yet, show prompt
+  if (!aboutMe?.story) {
+    return (
+      <div className="bg-bg-sidebar border border-border-subtle rounded-[20px] p-6 mb-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-text-muted border border-border-subtle">
+            <MessageCircle className="w-6 h-6" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-display font-bold text-lg text-text-main mb-1">Tell us about yourself</h3>
+            <p className="text-sm text-text-muted">Beyond grades and scores — who are you?</p>
+          </div>
+          <Link href="/advisor?mode=story">
+            <Button size="sm">
+              <MessageCircle className="w-4 h-4" />
+              Share My Story
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white border border-border-subtle rounded-[20px] p-6 shadow-card mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-display font-bold text-lg text-text-main">About Me</h3>
+        <button 
+          onClick={() => { setIsEditing(!isEditing); setTempStory(aboutMe.story || ""); }}
+          className="p-1.5 text-text-muted hover:text-accent-primary hover:bg-accent-surface rounded-lg transition-colors"
+        >
+          <Pencil className="w-4 h-4" />
+        </button>
+      </div>
+
+      {isEditing ? (
+        <div className="space-y-4">
+          <textarea
+            value={tempStory}
+            onChange={(e) => setTempStory(e.target.value)}
+            className="w-full px-4 py-3 text-sm border border-border-subtle rounded-xl focus:outline-none focus:border-accent-primary resize-none"
+            rows={4}
+            placeholder="Tell us about yourself..."
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-accent-primary rounded-lg hover:bg-accent-primary/90 transition-colors"
+            >
+              <Check className="w-4 h-4" />
+              Save
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="px-3 py-1.5 text-sm font-medium text-text-muted hover:text-text-main transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <p className="text-sm text-text-main leading-relaxed mb-4">{aboutMe.story}</p>
+          
+          {/* Values & Interests Tags */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {aboutMe.values?.map((value, i) => (
+              <span key={i} className="px-3 py-1 bg-accent-surface text-accent-primary text-xs font-medium rounded-full">
+                {value}
+              </span>
+            ))}
+            {aboutMe.interests?.map((interest, i) => (
+              <span key={i} className="px-3 py-1 bg-bg-sidebar text-text-muted text-xs font-medium rounded-full">
+                {interest}
+              </span>
+            ))}
+          </div>
+
+          {aboutMe.personality && (
+            <div className="text-xs text-text-muted italic">
+              "{aboutMe.personality}"
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }
 

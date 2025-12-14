@@ -2,7 +2,7 @@
 
 import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Coffee, FlaskConical, Users, Calculator, Target, Sparkles, TrendingUp, GraduationCap, Calendar, School, ChevronRight, Plus, Check } from "lucide-react";
+import { Coffee, FlaskConical, Users, Calculator, Target, Sparkles, TrendingUp, GraduationCap, Calendar, School, ChevronRight, Plus, Check, MessageCircle, Smile } from "lucide-react";
 import { ZenInput } from "@/components/dashboard/ZenInput";
 import { FocusWidgetEnhanced } from "@/components/dashboard/FocusWidgetEnhanced";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -88,12 +88,19 @@ const MOCK_PROFILES: Record<number, StudentProfile> = {
     ],
   },
   3: {
-    // Zone 3: Full profile
+    // Zone 3: Full profile with story
     onboarding: {
       name: "Alex",
       grade: "11th Grade",
       feeling: "Confident",
       dreamSchool: "Stanford",
+    },
+    aboutMe: {
+      story: "I've always been fascinated by how things work. When I was 10, I took apart my family's broken microwave just to see the components inside. That curiosity led me to robotics, where I discovered I love the intersection of engineering and teaching others. Running EduAccess has shown me that making knowledge accessible can change lives. I want to build technology that empowers people who've been overlooked.",
+      values: ["curiosity", "equity", "persistence"],
+      interests: ["robotics", "math", "teaching", "space exploration"],
+      personality: "Curious introvert who comes alive when explaining complex ideas",
+      aspirations: "I want to be an engineer who builds tools that democratize education.",
     },
     schools: [
       { id: "1", name: "Stanford", status: "dream" },
@@ -244,36 +251,49 @@ function DashboardContent() {
 
         <ZenInput />
 
-        {/* PRIMARY CTA: Check Chances */}
-        <div className="bg-gradient-to-br from-accent-surface to-white border border-accent-border rounded-[20px] p-8 shadow-float mb-8 relative overflow-hidden">
+        {/* PRIMARY CTA: Tell Us About You */}
+        <div className="bg-gradient-to-br from-accent-surface to-white border border-accent-border rounded-[20px] p-8 shadow-float mb-6 relative overflow-hidden">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="w-16 h-16 bg-white text-accent-primary rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-accent-border">
-              <TrendingUp className="w-8 h-8" />
+              <Smile className="w-8 h-8" />
             </div>
             <div className="flex-1">
-              <div className="text-xs font-bold text-accent-primary uppercase tracking-wider mb-2">Quick Start</div>
+              <div className="text-xs font-bold text-accent-primary uppercase tracking-wider mb-2">Let's Connect</div>
               <h2 className="font-display font-bold text-2xl mb-2 text-text-main">
-                {dreamSchool 
-                  ? `Check your chances at ${dreamSchool}`
-                  : "Check your chances at any school"
-                }
+                I'd love to get to know you
               </h2>
               <p className="text-text-muted mb-4 max-w-lg">
-                Share a few details and I'll show you where you stand. Takes about 2 minutes.
+                Beyond grades and scores — tell me about who you are, what you care about, and what makes you unique.
               </p>
-              <Link href="/advisor?mode=chances">
+              <Link href="/advisor?mode=story">
                 <Button>
-                  <TrendingUp className="w-4 h-4" />
-                  Check My Chances
+                  <MessageCircle className="w-4 h-4" />
+                  Tell Me About Yourself
                 </Button>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* SECONDARY CTAs: Three options */}
+        {/* SECONDARY CTA: Quick Win - Check Chances */}
+        <div className="bg-white border border-border-subtle rounded-xl p-5 mb-6 hover:border-accent-primary transition-all">
+          <Link href="/advisor?mode=chances" className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-accent-surface text-accent-primary rounded-xl flex items-center justify-center shrink-0">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-display font-bold text-lg text-text-main">
+                {dreamSchool ? `Check your chances at ${dreamSchool}` : "Check your chances"}
+              </h3>
+              <p className="text-sm text-text-muted">Quick 2-minute assessment</p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-text-muted" />
+          </Link>
+        </div>
+
+        {/* TERTIARY CTAs: More options */}
         <div className="mb-8">
-          <div className="text-xs font-bold text-text-light uppercase tracking-wider mb-4">Or dive deeper</div>
+          <div className="text-xs font-bold text-text-light uppercase tracking-wider mb-4">More ways to get started</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <CTACard 
               href="/advisor?mode=profile"
@@ -396,8 +416,27 @@ function DashboardContent() {
             )}
           </div>
 
-          {/* Right: Encourage next step */}
+          {/* Right: Story CTA + Next step */}
           <div className="flex flex-col gap-6">
+            {/* Story CTA - if no story */}
+            {!zoneStatus.hasStory && (
+              <div className="bg-accent-surface/50 border border-accent-border rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Smile className="w-4 h-4 text-accent-primary" />
+                  <span className="text-xs font-bold text-accent-primary uppercase tracking-wider">Get Personal</span>
+                </div>
+                <p className="text-sm text-text-main mb-4">
+                  Beyond the numbers — tell me who you really are and what drives you.
+                </p>
+                <Link href="/advisor?mode=story">
+                  <Button size="sm">
+                    <MessageCircle className="w-4 h-4" />
+                    Tell Me About Yourself
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             <div className="bg-accent-surface/50 border border-accent-border rounded-xl p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-accent-primary" />
@@ -424,6 +463,7 @@ function DashboardContent() {
             <div className="bg-bg-sidebar rounded-xl p-5">
               <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Setup Progress</div>
               <div className="space-y-2">
+                <ProgressItem label="Your Story" done={zoneStatus.hasStory} />
                 <ProgressItem label="School List" done={areas.schools.filled} />
                 <ProgressItem label="Profile" done={areas.profile.filled} />
                 <ProgressItem label="Goals" done={areas.goals.filled} />
@@ -483,6 +523,24 @@ function DashboardContent() {
 
           {/* Right Column */}
           <div className="flex flex-col gap-6">
+            {/* Subtle story prompt */}
+            {!zoneStatus.hasStory && (
+              <Link href="/advisor?mode=story" className="group">
+                <div className="bg-bg-sidebar border border-border-subtle rounded-xl p-4 hover:border-accent-primary transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Smile className="w-5 h-5 text-text-muted group-hover:text-accent-primary transition-colors" />
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-text-main group-hover:text-accent-primary transition-colors">
+                        Tell me about yourself
+                      </div>
+                      <div className="text-xs text-text-muted">Beyond the numbers</div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-text-light group-hover:text-accent-primary transition-colors" />
+                  </div>
+                </div>
+              </Link>
+            )}
+
             {/* Timeline preview */}
             <div>
               <h3 className="font-display font-bold text-lg mb-4">Timeline</h3>

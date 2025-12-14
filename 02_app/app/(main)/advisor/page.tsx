@@ -147,6 +147,21 @@ function AdvisorContent() {
           },
         ];
       }
+      // Mode: Personal Story
+      else if (mode === "story") {
+        welcomeMessages = [
+          {
+            id: "1",
+            role: "assistant",
+            text: `Hi${name ? ` ${name}` : ""}! I'd love to get to know you beyond the numbers.`,
+          },
+          {
+            id: "2",
+            role: "assistant",
+            text: "Tell me about yourself — what makes you tick? What are you curious about? What do you care deeply about?\n\nThis isn't about achievements. I want to understand who you are as a person. Take your time.",
+          },
+        ];
+      }
       // Initial query from dashboard
       else if (initialQuery) {
         welcomeMessages = [
