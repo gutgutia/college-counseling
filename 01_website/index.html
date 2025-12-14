@@ -377,45 +377,107 @@
       pointer-events: none;
     }
 
-    /* === Social Proof === */
-    .proof-section {
+    /* === Problem Section === */
+    .problem-section {
       padding: 100px 0;
       background: white;
       border-top: 1px solid var(--border);
+    }
+    .problem-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 60px;
       text-align: center;
     }
-    .proof-quote {
+    .stat-item {
+      padding: 24px;
+    }
+    .stat-number {
       font-family: 'Satoshi', sans-serif;
-      font-size: 32px;
-      font-weight: 500;
-      max-width: 700px;
-      margin: 0 auto 32px;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .stat-text {
+      font-size: 15px;
+      color: var(--text-muted);
       line-height: 1.5;
+    }
+    .problem-quote {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px;
+      background: var(--bg-secondary);
+      border-radius: 20px;
+    }
+    .problem-quote p {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .quote-author {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .quote-author strong {
       color: var(--text-main);
     }
-    .proof-author {
+
+    /* === Trust Section === */
+    .trust-section {
+      padding: 60px 0;
+      background: var(--accent-surface);
+      border-top: 1px solid var(--accent-border);
+      border-bottom: 1px solid var(--accent-border);
+    }
+    .trust-content {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
     }
-    .proof-avatar {
-      width: 48px; height: 48px;
-      background: linear-gradient(135deg, var(--accent-surface) 0%, var(--bg-secondary) 100%);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+    .trust-icon {
+      width: 56px; height: 56px;
+      background: var(--accent-primary);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+    .trust-icon i { width: 28px; height: 28px; }
+    .trust-text h3 {
+      font-family: 'Satoshi', sans-serif;
       font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 6px;
     }
-    .proof-info {
-      text-align: left;
-    }
-    .proof-name {
-      font-weight: 600;
+    .trust-text p {
       font-size: 15px;
-    }
-    .proof-role {
-      font-size: 14px;
       color: var(--text-muted);
+      line-height: 1.6;
+    }
+    @media (max-width: 600px) {
+      .problem-stats {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .trust-content {
+        flex-direction: column;
+        text-align: center;
+      }
     }
 
     /* === CTA === */
@@ -706,17 +768,42 @@
     </div>
   </section>
 
-  <!-- Social Proof -->
-  <section class="proof-section">
+  <!-- The Problem -->
+  <section class="problem-section">
     <div class="container">
-      <p class="proof-quote">
-        "It's like having a brilliant counselor in my pocket. I finally feel like I know what I'm doing."
-      </p>
-      <div class="proof-author">
-        <div class="proof-avatar">👩‍🎓</div>
-        <div class="proof-info">
-          <div class="proof-name">Sarah K.</div>
-          <div class="proof-role">High School Junior, California</div>
+      <div class="problem-stats">
+        <div class="stat-item">
+          <div class="stat-number">4M+</div>
+          <div class="stat-text">students apply to college each year</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">500:1</div>
+          <div class="stat-text">average student-to-counselor ratio at public schools</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">$200/hr</div>
+          <div class="stat-text">typical private counselor rate</div>
+        </div>
+      </div>
+      <div class="problem-quote">
+        <p>"The college admissions process has become so complex that many students, especially those without resources, are left navigating it alone."</p>
+        <div class="quote-author">
+          — <strong>The New York Times</strong>, on the college counseling gap
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-content">
+        <div class="trust-icon">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <div class="trust-text">
+          <h3>Your data stays yours</h3>
+          <p>We never share or sell your information. Your profile, conversations, and essays are private — always. We're here to help you, not monetize you.</p>
         </div>
       </div>
     </div>
