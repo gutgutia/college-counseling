@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature - Check Your Chances</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-app: #F9F8F6;
+      --bg-sidebar: #F3F1ED;
+      --bg-card: #FFFFFF;
+      --accent-primary: #12756A;
+      --accent-surface: #E8F5F3;
+      --accent-border: #C5E4DF;
+      --text-main: #2D2A26;
+      --text-muted: #6B665E;
+      --text-light: #9E988E;
+      --border-subtle: #E8E5DF;
+      --reach: #DC2626;
+      --reach-bg: #FEF2F2;
+      --target: #F59E0B;
+      --target-bg: #FFFBEB;
+      --safety: #22C55E;
+      --safety-bg: #F0FDF4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #F5F5F5 0%, #EDECEA 100%);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: 
+        0 25px 80px -20px rgba(0,0,0,0.15),
+        0 10px 30px -10px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(0,0,0,0.03);
+      overflow: hidden;
+      max-width: 580px;
+      width: 100%;
+    }
+
+    .school-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .school-logo {
+      width: 56px; height: 56px;
+      background: #8C1515;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 22px;
+      font-family: 'Satoshi', sans-serif;
+    }
+    .school-info h3 {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .school-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .chance-display {
+      margin-left: auto;
+      text-align: center;
+    }
+    .chance-number {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1;
+    }
+    .chance-tier {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: var(--reach-bg);
+      color: var(--reach);
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    .factors-section {
+      padding: 28px;
+    }
+    .factors-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .factor-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .factor-label {
+      width: 80px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+    .factor-bar {
+      flex: 1;
+      height: 10px;
+      background: var(--bg-sidebar);
+      border-radius: 100px;
+      position: relative;
+      overflow: visible;
+    }
+    .factor-fill {
+      height: 100%;
+      border-radius: 100px;
+    }
+    .factor-fill.strong { background: var(--accent-primary); }
+    .factor-fill.ok { background: var(--target); }
+    .factor-fill.gap { background: var(--reach); }
+    .factor-threshold {
+      position: absolute;
+      top: -3px;
+      bottom: -3px;
+      width: 3px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 2px;
+    }
+    .factor-icon {
+      width: 24px;
+      display: flex;
+      justify-content: center;
+    }
+    .factor-icon i { width: 18px; height: 18px; }
+    .factor-icon.strong { color: var(--accent-primary); }
+    .factor-icon.ok { color: var(--target); }
+    .factor-icon.gap { color: var(--reach); }
+
+    .advice-box {
+      background: var(--accent-surface);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-top: 24px;
+    }
+    .advice-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 10px;
+    }
+    .advice-header i { width: 16px; height: 16px; }
+    .advice-text {
+      font-size: 14px;
+      color: var(--accent-primary);
+      line-height: 1.6;
+    }
+    .advice-text strong {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="school-header">
+      <div class="school-logo">S</div>
+      <div class="school-info">
+        <h3>Stanford University</h3>
+        <p>Stanford, CA</p>
+      </div>
+      <div class="chance-display">
+        <div class="chance-number">14%</div>
+        <div class="chance-tier">Reach</div>
+      </div>
+    </div>
+
+    <div class="factors-section">
+      <div class="factors-title">Your Profile vs. Typical Admits</div>
+      
+      <div class="factor-row">
+        <div class="factor-label">Academics</div>
+        <div class="factor-bar">
+          <div class="factor-threshold" style="left: 90%;"></div>
+          <div class="factor-fill strong" style="width: 92%;"></div>
+        </div>
+        <div class="factor-icon strong"><i data-lucide="check"></i></div>
+      </div>
+
+      <div class="factor-row">
+        <div class="factor-label">Testing</div>
+        <div class="factor-bar">
+          <div class="factor-threshold" style="left: 85%;"></div>
+          <div class="factor-fill strong" style="width: 88%;"></div>
+        </div>
+        <div class="factor-icon strong"><i data-lucide="check"></i></div>
+      </div>
+
+      <div class="factor-row">
+        <div class="factor-label">Activities</div>
+        <div class="factor-bar">
+          <div class="factor-threshold" style="left: 90%;"></div>
+          <div class="factor-fill ok" style="width: 75%;"></div>
+        </div>
+        <div class="factor-icon ok"><i data-lucide="minus"></i></div>
+      </div>
+
+      <div class="factor-row">
+        <div class="factor-label">Awards</div>
+        <div class="factor-bar">
+          <div class="factor-threshold" style="left: 80%;"></div>
+          <div class="factor-fill gap" style="width: 40%;"></div>
+        </div>
+        <div class="factor-icon gap"><i data-lucide="alert-circle"></i></div>
+      </div>
+
+      <div class="advice-box">
+        <div class="advice-header">
+          <i data-lucide="sparkles"></i>
+          How to Improve
+        </div>
+        <div class="advice-text">
+          Your academics are strong. The gap is <strong>national-level recognition</strong> — focus on AIME qualification or a research publication to close it.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

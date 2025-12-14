@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature - Smart School List</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-app: #F9F8F6;
+      --bg-sidebar: #F3F1ED;
+      --bg-card: #FFFFFF;
+      --accent-primary: #12756A;
+      --accent-surface: #E8F5F3;
+      --accent-border: #C5E4DF;
+      --text-main: #2D2A26;
+      --text-muted: #6B665E;
+      --text-light: #9E988E;
+      --border-subtle: #E8E5DF;
+      --reach: #DC2626;
+      --reach-bg: #FEF2F2;
+      --target: #D97706;
+      --target-bg: #FFFBEB;
+      --safety: #16A34A;
+      --safety-bg: #F0FDF4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #F5F5F5 0%, #EDECEA 100%);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: 
+        0 25px 80px -20px rgba(0,0,0,0.15),
+        0 10px 30px -10px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(0,0,0,0.03);
+      overflow: hidden;
+      max-width: 520px;
+      width: 100%;
+      padding: 28px;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .list-title {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .balance-pills {
+      display: flex;
+      gap: 8px;
+    }
+    .balance-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 100px;
+    }
+    .balance-pill.reach { background: var(--reach-bg); color: var(--reach); }
+    .balance-pill.target { background: var(--target-bg); color: var(--target); }
+    .balance-pill.safety { background: var(--safety-bg); color: var(--safety); }
+    .balance-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .balance-dot.reach { background: var(--reach); }
+    .balance-dot.target { background: var(--target); }
+    .balance-dot.safety { background: var(--safety); }
+
+    .school-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .school-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--bg-app);
+      border-radius: 14px;
+      transition: all 0.15s;
+    }
+    .school-row:hover {
+      background: var(--accent-surface);
+    }
+    .school-logo {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .school-info {
+      flex: 1;
+    }
+    .school-name {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+    }
+    .school-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .school-chance {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 15px;
+      margin-right: 8px;
+    }
+    .school-tier {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .tier-reach { background: var(--reach-bg); color: var(--reach); }
+    .tier-target { background: var(--target-bg); color: var(--target); }
+    .tier-safety { background: var(--safety-bg); color: var(--safety); }
+
+    .suggestion-box {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .suggestion-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+    }
+    .suggestion-header i { width: 14px; height: 14px; }
+
+    .suggestion-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--accent-surface) 0%, white 100%);
+      border: 1px solid var(--accent-border);
+      border-radius: 14px;
+    }
+    .suggestion-content {
+      flex: 1;
+    }
+    .suggestion-name {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+    }
+    .suggestion-reason {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      padding: 8px 14px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--accent-border);
+    }
+    .add-btn i { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="list-header">
+      <div class="list-title">Your Schools</div>
+      <div class="balance-pills">
+        <div class="balance-pill reach">
+          <div class="balance-dot reach"></div>
+          4
+        </div>
+        <div class="balance-pill target">
+          <div class="balance-dot target"></div>
+          3
+        </div>
+        <div class="balance-pill safety">
+          <div class="balance-dot safety"></div>
+          2
+        </div>
+      </div>
+    </div>
+
+    <div class="school-list">
+      <div class="school-row">
+        <div class="school-logo" style="background: #8C1515;">S</div>
+        <div class="school-info">
+          <div class="school-name">Stanford</div>
+          <div class="school-meta">RD · Jan 1</div>
+        </div>
+        <div class="school-chance" style="color: var(--text-main);">14%</div>
+        <div class="school-tier tier-reach">Reach</div>
+      </div>
+
+      <div class="school-row">
+        <div class="school-logo" style="background: #00356B;">Y</div>
+        <div class="school-info">
+          <div class="school-name">Yale</div>
+          <div class="school-meta">ED · Nov 1</div>
+        </div>
+        <div class="school-chance" style="color: var(--text-main);">12%</div>
+        <div class="school-tier tier-reach">Reach</div>
+      </div>
+
+      <div class="school-row">
+        <div class="school-logo" style="background: #2774AE;">UC</div>
+        <div class="school-info">
+          <div class="school-name">UCLA</div>
+          <div class="school-meta">UC · Nov 30</div>
+        </div>
+        <div class="school-chance" style="color: var(--target);">42%</div>
+        <div class="school-tier tier-target">Target</div>
+      </div>
+
+      <div class="school-row">
+        <div class="school-logo" style="background: #182B49;">UC</div>
+        <div class="school-info">
+          <div class="school-name">UC San Diego</div>
+          <div class="school-meta">UC · Nov 30</div>
+        </div>
+        <div class="school-chance" style="color: var(--safety);">72%</div>
+        <div class="school-tier tier-safety">Safety</div>
+      </div>
+    </div>
+
+    <div class="suggestion-box">
+      <div class="suggestion-header">
+        <i data-lucide="sparkles"></i>
+        Suggested for You
+      </div>
+      <div class="suggestion-card">
+        <div class="school-logo" style="background: #B3A369;">GT</div>
+        <div class="suggestion-content">
+          <div class="suggestion-name">Georgia Tech</div>
+          <div class="suggestion-reason">Strong match for your robotics interest</div>
+        </div>
+        <div class="add-btn">
+          <i data-lucide="plus"></i>
+          Add
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

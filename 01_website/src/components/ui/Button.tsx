@@ -1,62 +1,51 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { clsx } from "clsx";
+import { ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "ghost";
-type ButtonSize = "sm" | "md" | "lg";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
+interface ButtonProps {
   children: ReactNode;
-  icon?: ReactNode;
+  variant?: "primary" | "secondary" | "ghost" | "white";
+  size?: "sm" | "md" | "lg";
+  href?: string;
+  className?: string;
+  onClick?: () => void;
 }
 
-const variantStyles: Record<ButtonVariant, string> = {
-  primary: `
-    bg-[var(--s3-cyan)] text-[var(--s3-text-inverse)]
-    hover:bg-[var(--s3-cyan-hover)] hover:-translate-y-0.5
-    hover:shadow-[0_8px_30px_rgba(0,229,255,0.3)]
-  `,
-  secondary: `
-    bg-transparent text-[var(--s3-text-primary)]
-    border-2 border-[var(--s3-border-hover)]
-    hover:border-[var(--s3-text-primary)] hover:bg-white/5
-  `,
-  ghost: `
-    bg-transparent text-[var(--s3-text-secondary)]
-    hover:text-[var(--s3-text-primary)] hover:bg-white/5
-  `,
-};
-
-const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-5 py-2.5 text-xs",
-  md: "px-7 py-3.5 text-sm",
-  lg: "px-9 py-4.5 text-base",
-};
-
-export function Button({
-  variant = "primary",
+export function Button({ 
+  children, 
+  variant = "primary", 
   size = "md",
-  children,
-  icon,
-  className = "",
-  ...props
+  href,
+  className,
+  onClick 
 }: ButtonProps) {
+  const baseStyles = "inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all cursor-pointer";
+  
+  const variants = {
+    primary: "bg-[var(--text-main)] text-white shadow-md hover:shadow-lg hover:-translate-y-0.5",
+    secondary: "bg-white text-[var(--text-main)] border border-[var(--border)] hover:bg-[var(--bg-secondary)]",
+    ghost: "text-[var(--text-main)] hover:bg-black/5",
+    white: "bg-white text-[var(--text-main)] hover:bg-[var(--bg-secondary)]",
+  };
+
+  const sizes = {
+    sm: "px-4 py-2 text-sm",
+    md: "px-6 py-3 text-[15px]",
+    lg: "px-8 py-4 text-base",
+  };
+
+  const classes = clsx(baseStyles, variants[variant], sizes[size], className);
+
+  if (href) {
+    return (
+      <a href={href} className={classes}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <button
-      className={`
-        inline-flex items-center justify-center gap-2
-        font-semibold uppercase tracking-wide
-        rounded-full cursor-pointer
-        transition-all duration-200
-        ${variantStyles[variant]}
-        ${sizeStyles[size]}
-        ${className}
-      `}
-      {...props}
-    >
-      {icon}
+    <button onClick={onClick} className={classes}>
       {children}
     </button>
   );
 }
-

@@ -1,69 +1,105 @@
-import { Button } from "@/components/ui/Button";
-import { StatCard } from "@/components/ui/Card";
-import { PlayIcon } from "@/components/icons";
+"use client";
+
+import { Sparkles, MessageCircle, PlayCircle } from "lucide-react";
+import { Button } from "../ui/Button";
 
 export function Hero() {
   return (
-    <section className="min-h-[90vh] flex items-center relative overflow-hidden">
-      {/* Background gradients */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse at 70% 30%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 30% 70%, rgba(0, 229, 255, 0.05) 0%, transparent 40%)
-          `,
-        }}
-      />
+    <header className="pt-40 pb-24 text-center">
+      <div className="container">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-surface)] border border-[var(--accent-border)] rounded-full text-sm font-semibold text-[var(--accent-primary)] mb-7">
+          <Sparkles className="w-3.5 h-3.5" />
+          AI-Powered College Counseling
+        </div>
 
-      {/* Pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0C13.5 0 0 13.5 0 30s13.5 30 30 30 30-13.5 30-30S46.5 0 30 0zm0 55C16.2 55 5 43.8 5 30S16.2 5 30 5s25 11.2 25 25-11.2 25-25 25z' fill='%2300E5FF'/%3E%3C/svg%3E")`,
-        }}
-      />
+        {/* Title */}
+        <h1 className="font-['Satoshi'] text-5xl md:text-6xl font-black mb-6 max-w-3xl mx-auto">
+          Your personal advisor for the{" "}
+          <span className="text-[var(--accent-primary)]">college journey</span>
+        </h1>
 
-      <div className="max-w-[1400px] mx-auto px-10 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          {/* Text content */}
-          <div>
-            <div className="text-xs font-medium uppercase tracking-[0.15em] text-[var(--s3-cyan)] mb-6">
-              College Prep. Reimagined.
-            </div>
+        {/* Subtitle */}
+        <p className="text-xl text-[var(--text-muted)] max-w-xl mx-auto mb-10 leading-relaxed">
+          Get expert guidance, honest chance assessments, and a clear roadmap — all through a conversation with an AI that knows you.
+        </p>
 
-            <h1 className="font-display text-[clamp(60px,10vw,100px)] leading-[0.9] tracking-wide mb-8">
-              <span className="block">THE COLLEGE</span>
-              <span className="block">PROCESS IS</span>
-              <span className="block text-[var(--s3-cyan)]">CHAOS.</span>
-            </h1>
+        {/* CTAs */}
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
+          <Button variant="primary" href="#">
+            <MessageCircle className="w-4 h-4" />
+            Start Chatting Free
+          </Button>
+          <Button variant="secondary" href="#how">
+            <PlayCircle className="w-4 h-4" />
+            See How It Works
+          </Button>
+        </div>
 
-            <p className="text-lg text-[var(--s3-text-secondary)] max-w-[480px] mb-10 leading-relaxed">
-              One platform. Everything you need—programs, deadlines,
-              strategy—personalized to you. No more 47 open tabs.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Button icon={<PlayIcon />}>Start Free</Button>
-              <Button variant="secondary">See How It Works</Button>
-            </div>
-          </div>
-
-          {/* Floating cards */}
-          <div className="relative h-[500px] hidden lg:flex items-center justify-center">
-            <div className="absolute top-[10%] right-[10%] rotate-3">
-              <StatCard label="SAT Score" value="1,520" trend="↑ 60 from practice" />
-            </div>
-            <div className="absolute bottom-[25%] left-[5%] -rotate-2">
-              <StatCard label="Applications" value="12" trend="4 submitted" />
-            </div>
-            <div className="absolute bottom-[5%] right-[15%]">
-              <StatCard label="Match Score" value="94%" trend="Stanford SIMR" />
+        {/* Screenshot - Responsive container */}
+        <div className="hero-screenshot-wrapper max-w-[1000px] mx-auto">
+          <div 
+            className="hero-screenshot-container rounded-2xl overflow-hidden bg-white"
+            style={{
+              boxShadow: "0 40px 100px -30px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04)"
+            }}
+          >
+            <div className="hero-screenshot-inner w-[1000px] h-[620px] origin-top-left">
+              <iframe 
+                src="/screenshots/hero-screenshot.html" 
+                className="w-[1000px] h-[620px] border-none pointer-events-none"
+                loading="lazy"
+                scrolling="no"
+              />
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Responsive scaling */}
+      <style jsx>{`
+        .hero-screenshot-wrapper {
+          position: relative;
+        }
+        .hero-screenshot-container {
+          position: relative;
+        }
+        .hero-screenshot-inner {
+          transform: scale(1);
+        }
+        @media (max-width: 1048px) {
+          .hero-screenshot-wrapper {
+            height: calc(620px * 0.85);
+          }
+          .hero-screenshot-inner {
+            transform: scale(0.85);
+          }
+        }
+        @media (max-width: 850px) {
+          .hero-screenshot-wrapper {
+            height: calc(620px * 0.72);
+          }
+          .hero-screenshot-inner {
+            transform: scale(0.72);
+          }
+        }
+        @media (max-width: 650px) {
+          .hero-screenshot-wrapper {
+            height: calc(620px * 0.55);
+          }
+          .hero-screenshot-inner {
+            transform: scale(0.55);
+          }
+        }
+        @media (max-width: 520px) {
+          .hero-screenshot-wrapper {
+            height: calc(620px * 0.42);
+          }
+          .hero-screenshot-inner {
+            transform: scale(0.42);
+          }
+        }
+      `}</style>
+    </header>
   );
 }
-

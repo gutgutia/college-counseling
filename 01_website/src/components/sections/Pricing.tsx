@@ -1,130 +1,162 @@
-import { Button } from "@/components/ui/Button";
-import { CheckCircleIcon } from "@/components/icons";
-import Link from "next/link";
+import { Check, X, Info } from "lucide-react";
+import { Button } from "../ui/Button";
 
-const tiers = [
+const plans = [
   {
     name: "Free",
     price: "$0",
-    period: "",
-    description: "Get started and see where you stand",
+    period: "forever",
+    description: "For students exploring their options",
     features: [
-      "Full profile builder",
-      "Unlimited school matching",
-      "Basic chance labels (Reach/Match/Safety)",
-      "Top 3 gaps identified",
-      "Browse summer programs",
-      "Track up to 5 schools",
+      { text: "20 AI messages per week", included: true },
+      { text: "Profile building", included: true },
+      { text: "School discovery", included: true },
+      { text: "Up to 3 schools on your list", included: true },
+      { text: "Basic chances (Reach/Target/Safety)", included: true },
+      { text: "Basic roadmap & tasks", included: true },
+      { text: "Voice chat", included: false },
+      { text: "Essay review", included: false },
+      { text: "Shared access", included: false },
     ],
-    cta: "Start Free",
-    variant: "secondary" as const,
+    cta: "Get Started Free",
+    ctaVariant: "secondary" as const,
   },
   {
-    name: "Pro",
+    name: "Premium",
     price: "$19",
     period: "/month",
-    description: "The full playbook for serious students",
+    description: "For serious applicants ready to go all-in",
+    badge: "Most Popular",
+    featured: true,
     features: [
-      "Everything in Free",
-      "Detailed chance % per school",
-      "Full gap analysis + action plan",
-      "Personalized program matching",
-      "Unlimited deadline tracking",
-      "Essay tracker",
-      "Progress tracking over time",
+      { text: "Unlimited AI messages", included: true, bold: true },
+      { text: "Profile building", included: true },
+      { text: "School discovery", included: true },
+      { text: "Unlimited schools on your list", included: true, bold: true },
+      { text: "Detailed chances with % breakdown", included: true, bold: true },
+      { text: "Smart roadmap with AI suggestions", included: true, bold: true },
+      { text: "Voice chat", included: true },
+      { text: "Essay review & feedback", included: true },
+      { text: "Share with parents & counselors", included: true },
     ],
-    cta: "Get Pro",
-    variant: "primary" as const,
-    popular: true,
+    cta: "Start Premium",
+    ctaVariant: "primary" as const,
+    annual: "Or $149/year (save 2 months)",
+  },
+  {
+    name: "Senior Year Pass",
+    price: "$99",
+    period: "one-time",
+    description: "For 12th graders in crunch mode",
+    features: [
+      { text: "Everything in Premium", included: true },
+      { text: "Full access for senior year", included: true },
+      { text: "No monthly payments", included: true },
+      { text: "Application season covered", included: true },
+    ],
+    cta: "Get Senior Pass",
+    ctaVariant: "secondary" as const,
   },
 ];
 
 export function Pricing() {
   return (
-    <section className="py-24 bg-[var(--s3-bg-secondary)]">
-      <div className="max-w-[1400px] mx-auto px-10">
+    <section id="pricing" className="py-24 bg-white border-t border-[var(--border)]">
+      <div className="container">
+        {/* Header */}
         <div className="text-center mb-16">
-          <div className="text-xs font-medium uppercase tracking-[0.15em] text-[var(--s3-cyan)] mb-4">
-            Simple Pricing
-          </div>
-          <h2 className="font-display text-5xl md:text-6xl tracking-wide mb-4">
-            START FREE. UPGRADE WHEN READY.
+          <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent-primary)] mb-4">
+            Pricing
+          </p>
+          <h2 className="font-['Satoshi'] text-4xl font-bold mb-4">
+            Start free, upgrade when ready
           </h2>
-          <p className="text-[var(--s3-text-secondary)] max-w-xl mx-auto">
-            Annual: $149/year (save $79) • Lifetime: $399 one-time
+          <p className="text-lg text-[var(--text-muted)]">
+            No credit card required. Use the free tier forever.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {tiers.map((tier) => (
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-10 max-w-5xl mx-auto">
+          {plans.map((plan, i) => (
             <div
-              key={tier.name}
-              className={`
-                relative p-8 rounded-2xl border
-                ${
-                  tier.popular
-                    ? "bg-[var(--s3-bg-elevated)] border-[var(--s3-cyan)]"
-                    : "bg-[var(--s3-bg-primary)] border-[var(--s3-border)]"
-                }
-              `}
+              key={i}
+              className={`rounded-3xl p-8 flex flex-col relative ${
+                plan.featured
+                  ? "bg-[var(--text-main)] text-white scale-105 shadow-xl"
+                  : "bg-[var(--bg-secondary)]"
+              }`}
             >
-              {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--s3-cyan)] text-[var(--s3-text-inverse)] text-xs font-semibold uppercase tracking-wide rounded-full">
-                  Most Popular
+              {plan.badge && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--accent-primary)] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
+                  {plan.badge}
                 </div>
               )}
 
-              <div className="mb-6">
-                <h3 className="font-display text-2xl tracking-wide mb-2">
-                  {tier.name}
+              {/* Header */}
+              <div className="text-center pb-6 border-b border-black/10 mb-6">
+                {plan.featured && <div className="border-white/20" />}
+                <h3 className="font-['Satoshi'] text-xl font-bold mb-3">
+                  {plan.name}
                 </h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-mono text-4xl font-bold">
-                    {tier.price}
+                <div className="flex items-baseline justify-center gap-1 mb-2">
+                  <span className="font-['Satoshi'] text-5xl font-black">
+                    {plan.price}
                   </span>
-                  <span className="text-[var(--s3-text-muted)]">
-                    {tier.period}
+                  <span className={plan.featured ? "text-white/70" : "text-[var(--text-muted)]"}>
+                    {plan.period}
                   </span>
                 </div>
-                <p className="text-sm text-[var(--s3-text-secondary)] mt-2">
-                  {tier.description}
+                <p className={plan.featured ? "text-white/70 text-sm" : "text-[var(--text-muted)] text-sm"}>
+                  {plan.description}
                 </p>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <CheckCircleIcon
-                      className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                        tier.popular
-                          ? "text-[var(--s3-cyan)]"
-                          : "text-[var(--s3-success)]"
-                      }`}
-                    />
-                    <span className="text-sm text-[var(--s3-text-secondary)]">
-                      {feature}
+              {/* Features */}
+              <ul className="flex-1 space-y-3 mb-6">
+                {plan.features.map((feature, j) => (
+                  <li
+                    key={j}
+                    className={`flex items-start gap-3 text-sm ${
+                      !feature.included ? (plan.featured ? "text-white/40" : "text-[var(--text-light)]") : ""
+                    }`}
+                  >
+                    {feature.included ? (
+                      <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.featured ? "text-green-400" : "text-[var(--accent-primary)]"}`} />
+                    ) : (
+                      <X className="w-4 h-4 flex-shrink-0 mt-0.5 text-[var(--text-light)]" />
+                    )}
+                    <span className={"bold" in feature && feature.bold ? "font-semibold" : ""}>
+                      {feature.text}
                     </span>
                   </li>
                 ))}
               </ul>
 
-              <Button variant={tier.variant} className="w-full">
-                {tier.cta}
+              {/* CTA */}
+              <Button
+                variant={plan.featured ? "white" : plan.ctaVariant}
+                href="#"
+                className="w-full"
+              >
+                {plan.cta}
               </Button>
+
+              {plan.annual && (
+                <p className="text-center text-xs text-white/60 mt-3">
+                  {plan.annual}
+                </p>
+              )}
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-8">
-          <Link
-            href="/pricing"
-            className="text-sm text-[var(--s3-cyan)] hover:underline"
-          >
-            See all pricing options →
-          </Link>
+        {/* Note */}
+        <div className="flex items-center justify-center gap-2 text-[var(--text-muted)] text-sm">
+          <Info className="w-4 h-4 text-[var(--accent-primary)]" />
+          <p>Not sure yet? Start free and upgrade anytime. Your data carries over.</p>
         </div>
       </div>
     </section>
   );
 }
-
