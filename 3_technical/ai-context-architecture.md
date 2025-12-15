@@ -94,9 +94,84 @@ System Prompt = [
 | Conversation State | ~100 |
 | **Total Overhead** | **~750 tokens** |
 
+## Dual-Model Architecture (Kimi + Opus)
+
+### Overview
+
+Two models run **in parallel** for each user message:
+- **Kimi (Groq)**: Fast (~50ms) - acknowledgment + tool extraction
+- **Opus (Claude)**: Deep (~500ms) - substantive response
+
+They are **independent** - Kimi does not brief Opus. Both parse the raw message separately.
+
+### Flow
+
+```
+User Message
+    │
+    ├─────────────────────────────────────┐
+    │                                     │
+    ▼                                     ▼
+KIMI (Fast)                           OPUS (Deep)
+    │                                     │
+    ├── Parse entities                    ├── Full context (750 tokens)
+    ├── Extract tool calls                ├── Deep thinking
+    ├── Generate acknowledgment           ├── Empathetic response
+    │                                     │
+    ▼                                     ▼
+Stream ack to user (~50ms)           Stream response (~500ms)
+Show widgets immediately             Continues after ack
+```
+
+### What Each Model Does
+
+| Model | Context | Job | Output |
+|-------|---------|-----|--------|
+| Kimi | Slim (~200 tokens) | Parse, acknowledge, extract tools | JSON: `{ tools, ack, entities }` |
+| Opus | Full (~750 tokens) | Advise, empathize, think deeply | Natural language response |
+
+### Kimi's Prompt (Slim)
+
+```
+You are a fast parser for a college counseling AI.
+1. Extract data points (GPA, scores, activities, schools)
+2. Decide which tools to call
+3. Generate a brief acknowledgment (1 sentence max)
+
+Do NOT give advice. Do NOT answer questions. Just parse and acknowledge.
+
+Student: [name], [grade]
+Entry: [where they came from]
+```
+
+### Opus's Prompt (Full)
+
+Uses all 5 context components documented above:
+- Profile Narrative
+- Conversation Summary
+- Entry Context
+- Counselor Objectives
+- Conversation State
+
+### Why Parallel, Not Sequential?
+
+- **Latency**: User sees response start in 50ms, not 550ms
+- **Independence**: Opus is smart enough to parse on its own
+- **Simplicity**: No coordination needed between models
+
+The only "handoff" is at the stream level - Kimi's output appears first, Opus continues.
+
+### Token Budgets by Model
+
+| Model | Context Budget | Purpose |
+|-------|---------------|---------|
+| Kimi | ~200 tokens | Just enough to parse |
+| Opus | ~750 tokens | Full context for deep thinking |
+
 ## Key Design Decisions
 
 1. **Lazy summarization**: Previous session is summarized when new session starts, not immediately after session ends
 2. **Hybrid state management**: React state for UI (widgets), system prompt for AI context
 3. **Proactive objectives**: AI comes prepared with goals, not just reactive to user
 4. **Narrative over JSON**: Profile context is human-readable text for the AI, not raw JSON
+5. **Parallel models**: Kimi and Opus run independently for speed, no briefing between them
