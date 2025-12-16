@@ -85,7 +85,8 @@ export function ChatInterface({
   }, [mode]);
   
   // Send message to API
-  const sendMessage = useCallback(async (content: string) => {
+  // skipWidgetDetection: when true, don't trigger widget detection (for confirmation follow-ups)
+  const sendMessage = useCallback(async (content: string, skipWidgetDetection = false) => {
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: "user",
@@ -132,13 +133,9 @@ export function ChatInterface({
       // Read the stream
       while (true) {
         const { done, value } = await reader.read();
-        if (done) {
-          console.log("Stream done");
-          break;
-        }
+        if (done) break;
         
         const chunk = decoder.decode(value, { stream: true });
-        console.log("Raw chunk received:", JSON.stringify(chunk.slice(0, 200)));
         
         // Try to parse as data stream format (0:"text") or plain text
         if (chunk.includes("0:")) {
@@ -170,12 +167,24 @@ export function ChatInterface({
         );
       }
       
-      console.log("Stream complete. Full text:", fullText.slice(0, 100));
+      // If response is empty, show a fallback message
+      if (!fullText.trim()) {
+        console.warn("Empty AI response received");
+        setMessages(prev => 
+          prev.map(m => 
+            m.id === assistantMessage.id 
+              ? { ...m, content: "I got that! What else would you like to share?" }
+              : m
+          )
+        );
+        fullText = "I got that! What else would you like to share?";
+      }
       
       // After streaming is complete, check for tool calls in the response
-      // For now, we'll detect patterns in the text and show widgets
-      // In the future, this will be properly integrated with tool results
-      detectAndShowWidgets(content, fullText);
+      // Skip if this was a confirmation follow-up message
+      if (!skipWidgetDetection) {
+        detectAndShowWidgets(content, fullText);
+      }
       
     } catch (error) {
       console.error("Chat error:", error);
@@ -190,7 +199,7 @@ export function ChatInterface({
     } finally {
       setIsLoading(false);
     }
-  }, [messages]);
+  }, [messages, mode]);
   
   // Simple pattern detection for widgets (temporary until tool calls work properly)
   const detectAndShowWidgets = (userInput: string, assistantResponse: string) => {
@@ -386,6 +395,8 @@ export function ChatInterface({
           prev.map(w => w.id === widgetId ? { ...w, status: "confirmed" as const } : w)
         );
         onProfileUpdate?.();
+        // No auto-message - the AI already acknowledged in its response
+        // User can continue the conversation naturally
       } else {
         console.error("Failed to save:", await response.text());
       }
