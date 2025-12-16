@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireProfile } from "@/lib/auth";
+import { invalidateProfileCache } from "@/lib/cache/profile-cache";
 
 /**
  * GET /api/profile/activities
@@ -61,6 +62,9 @@ export async function POST(request: NextRequest) {
         displayOrder: body.displayOrder ?? nextOrder,
       },
     });
+    
+    // Invalidate welcome message cache
+    invalidateProfileCache(profileId);
     
     return NextResponse.json(activity, { status: 201 });
   } catch (error) {

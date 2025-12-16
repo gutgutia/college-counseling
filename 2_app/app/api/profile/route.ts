@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentUser, getCurrentProfileId } from "@/lib/auth";
+import { invalidateProfileCache } from "@/lib/cache/profile-cache";
 
 /**
  * GET /api/profile
@@ -121,6 +122,9 @@ export async function PUT(request: NextRequest) {
       where: { id: profileId },
       data: updateData,
     });
+    
+    // Invalidate welcome message cache
+    invalidateProfileCache(profileId);
     
     return NextResponse.json(profile);
   } catch (error) {

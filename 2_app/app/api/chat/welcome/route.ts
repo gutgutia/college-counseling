@@ -1,31 +1,37 @@
 /**
  * Welcome Message API
  * Generates an AI-powered initial greeting based on user context
+ * 
+ * Optimized for speed:
+ * - Uses in-memory cache for profile data (~1ms vs ~1000ms)
+ * - Uses Kimi K2 via Groq for fast generation (~300ms)
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "ai";
 import { modelFor } from "@/lib/ai";
-import { assembleContext } from "@/lib/ai/context/assembler";
 import { getCurrentProfileId } from "@/lib/auth";
-import { EntryMode } from "@/lib/ai/context/entry-context";
+import { prisma } from "@/lib/db";
+import { getCachedProfile, setCachedProfile } from "@/lib/cache/profile-cache";
 
 // Mode descriptions for the AI
 const MODE_CONTEXT: Record<string, string> = {
-  onboarding: "The student just signed up and is going through initial onboarding. Focus on warmly welcoming them and asking for their name.",
-  chances: "The student wants to check their admission chances. Be ready to ask about their profile and target schools.",
-  schools: "The student wants to build their college list. Help them explore and add schools.",
-  planning: "The student wants to set goals and plan their activities. Help them think strategically.",
-  profile: "The student wants to update their profile information (GPA, scores, activities, etc.).",
-  story: "The student wants to share their personal story. Ask open-ended questions about who they are.",
-  general: "The student is starting a general conversation. Be helpful and guide them.",
+  onboarding: "The student just signed up. Focus on warmly welcoming them and asking for their name.",
+  chances: "The student wants to check their admission chances.",
+  schools: "The student wants to build their college list.",
+  planning: "The student wants to set goals and plan ahead.",
+  profile: "The student wants to update their profile.",
+  story: "The student wants to share their personal story.",
+  general: "General conversation.",
 };
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
     const { mode = "general" } = await request.json();
     
-    // Get current user's profile
+    // Get current user's profile ID
     const profileId = await getCurrentProfileId();
     if (!profileId) {
       return NextResponse.json({
@@ -33,54 +39,91 @@ export async function POST(request: NextRequest) {
       });
     }
     
-    // Assemble context for this user
-    const context = await assembleContext({
-      profileId,
-      mode: mode as EntryMode,
-      messages: [],
-      sessionStartTime: new Date(),
-      isNewUser: mode === "onboarding",
-    });
+    // Check cache first
+    let profile = getCachedProfile(profileId);
+    let dbTime = 0;
+    let cacheHit = false;
+    
+    if (profile) {
+      cacheHit = true;
+    } else {
+      // Lightweight profile fetch - only what we need for welcome
+      const dbStart = Date.now();
+      const dbProfile = await prisma.studentProfile.findUnique({
+        where: { id: profileId },
+        select: {
+          firstName: true,
+          preferredName: true,
+          grade: true,
+          activities: {
+            select: { title: true, isLeadership: true },
+            take: 2,
+            orderBy: { displayOrder: "asc" },
+          },
+        },
+      });
+      dbTime = Date.now() - dbStart;
+      
+      if (dbProfile) {
+        profile = {
+          firstName: dbProfile.firstName,
+          preferredName: dbProfile.preferredName,
+          grade: dbProfile.grade,
+          activities: dbProfile.activities,
+        };
+        // Cache for next time
+        setCachedProfile(profileId, profile);
+      }
+    }
+    
+    // Build minimal context
+    const name = profile?.preferredName || profile?.firstName || null;
+    const grade = profile?.grade || null;
+    const activities = profile?.activities || [];
+    
+    let profileSummary = "";
+    if (name) {
+      profileSummary = `Student: ${name}`;
+      if (grade) profileSummary += `, ${grade}`;
+      if (activities.length > 0) {
+        const activityNames = activities.map(a => 
+          a.isLeadership ? `${a.title} (leadership)` : a.title
+        ).join(", ");
+        profileSummary += `. Activities: ${activityNames}`;
+      }
+    }
     
     // Generate personalized welcome
-    const systemPrompt = `You are Sesame, a warm and knowledgeable college admissions advisor.
-Your task is to generate a brief, personalized opening message (2-4 sentences max).
+    const systemPrompt = `You are Sesame, a warm college admissions advisor.
+Generate a brief opening message (2-3 sentences max).
 
-Current context:
-${MODE_CONTEXT[mode] || MODE_CONTEXT.general}
+Mode: ${MODE_CONTEXT[mode] || MODE_CONTEXT.general}
+${profileSummary ? `\nStudent: ${profileSummary}` : "\nNew student - no profile yet."}
 
-${context.profileNarrative ? `Student Profile Summary:\n${context.profileNarrative}` : "This is a new student with no profile data yet."}
+Rules:
+- Be warm and casual
+- Use their name if known
+- Reference an activity if available
+- End with a question
+- Keep it SHORT`;
 
-${context.components.counselorObjectives ? `Your objectives for this conversation:\n${context.components.counselorObjectives}` : ""}
-
-Guidelines:
-- Be warm, casual, and encouraging (not overly formal)
-- If this is a new user, welcome them and ask for their name
-- If you know their name, use it
-- Reference something specific from their profile if available
-- Keep it SHORT - 2-4 sentences only
-- End with a question or invitation to continue
-- Don't use bullet points or lists - this is conversational
-- Don't say "I'm here to help" or similar clichés`;
-
-    const startTime = Date.now();
+    const genStart = Date.now();
     
     const { text } = await generateText({
-      model: modelFor.fastParsing, // Kimi K2 via Groq - much faster
+      model: modelFor.fastParsing,
       system: systemPrompt,
-      prompt: "Generate the opening message for this conversation.",
-      temperature: 0.7, // Slightly higher for more natural greetings
-      maxTokens: 200,
+      prompt: "Generate the opening message.",
+      temperature: 0.7,
+      maxTokens: 150,
     });
     
-    console.log(`[Welcome] Generated in ${Date.now() - startTime}ms`);
+    const genTime = Date.now() - genStart;
+    console.log(`[Welcome] ${cacheHit ? "CACHE HIT" : `DB: ${dbTime}ms`}, Gen: ${genTime}ms, Total: ${Date.now() - startTime}ms`);
     
     return NextResponse.json({ message: text.trim() });
     
   } catch (error) {
     console.error("Welcome message error:", error);
-    
-    // Fallback to simple message if AI fails
     return NextResponse.json({
       message: "Hi! I'm Sesame, your college prep advisor. What's on your mind today?",
     });
